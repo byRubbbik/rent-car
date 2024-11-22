@@ -12,8 +12,14 @@ def login_forms(loginform):
 def reg_forms(regform):
     if regform["username"]:
         if regform["password"]:
-            user = register(regform)
-            return user
+            count = 0
+            for i in regform["password"]:
+                count += 1
+            if count >= 8:
+                user = register(regform)
+                return user
+            else:
+                return 1
     return False
     
             

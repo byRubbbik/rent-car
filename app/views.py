@@ -8,10 +8,11 @@ from app.services.forms import login_forms, reg_forms
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@login_required
+
 @app.route("/catalog")
+@login_required
 def catalog():
     car = Car.query.all()
     return render_template('catalog.html', cars=car)
@@ -20,7 +21,6 @@ def catalog():
 # FOR AUTH
 @app.route('/register', methods=['POST', 'GET'])
 def register():
-
     if request.method == 'POST':
         regform = {
             "username": request.form.get('username'),
@@ -28,8 +28,11 @@ def register():
         }
         result = reg_forms(regform=regform)
         if result:
-            login_user(result)
-            return redirect(url_for('profile', username=current_user.username))
+            if result == 1:
+                flash("Пароль должен состоять из и более 8 символов")
+            else:
+                login_user(result)
+                return redirect(url_for('profile', username=current_user.username))
         else:
             flash('Проверьте поля ввода')
     return render_template('register.html')
@@ -48,11 +51,15 @@ def login():
            return redirect(url_for('profile', username=current_user.username))
         else:
             flash('Проверьте поля ввода')
+    return render_template("login.html")
+
+@app.route('/profile/add_userinfo/<id>', methods=["GET", "PUST"])
+def add_userinfo(id):
     return render_template()
 
 
-@login_required
 @app.route('/profile/<username>', methods=['POST', 'GET'])
+@login_required
 def profile(username):
     user = User.query.filter_by(username=username).first()
     if user != current_user:
@@ -60,8 +67,8 @@ def profile(username):
 
     userinfo = UserInfo.query.filter_by(user_id=user.id)
     if not userinfo:
-        ...
-        
+        return redirect(url_for('add_userinfo', id=user.id))
+    return render_template("profile.html")
 
 @app.route('/logout')
 def logout():
