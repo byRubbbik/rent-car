@@ -60,10 +60,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .then(data => {
-                if (data.success) {
-                    alert(data.message); // Уведомление об успешном завершении
-                }
-            })
+                    alert('Аренда успешно добавлена!');
+                })
             .catch(error => {
                 console.error('Ошибка:', error);
                 alert('Произошла ошибка при прекращении аренды');

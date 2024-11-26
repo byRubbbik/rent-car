@@ -1,3 +1,5 @@
+import json
+
 from bs4 import BeautifulSoup
 
 from flask import url_for
@@ -69,3 +71,18 @@ def test_protected_route(client, add_user):
     title = soup.find('title')
     assert title is not None
     assert title.text == "Каталог автомобилей"
+
+
+def test_add_rent_success(client, login_user, add_car):
+    """Тест успешного добавления аренды."""
+    user = login_user
+    car = add_car(brand="Test Car", price=12, photo_path="path/to/photo")
+
+    rent_data = {
+        "user_id": user.id,
+        "car_id": car.id
+    }
+
+    response = client.post("/api/v1/add_rent", data=json.dumps(rent_data), content_type="application/json")
+
+    assert response.status_code == 201

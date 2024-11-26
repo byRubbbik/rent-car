@@ -32,7 +32,8 @@ def add_user_info(userinfoForms):
             first_name=userinfoForms['first_name'],
             last_name=userinfoForms['last_name'],
             phone_number=userinfoForms['phone_number'],
-            email=userinfoForms['email']
+            email=userinfoForms['email'],
+            user_id=userinfoForms['id']
         )
         
         db.session.add(new_info)
