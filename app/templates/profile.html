@@ -3,7 +3,75 @@
 {% block title %}Профиль{% endblock %}
 
 {% block main %}
-<div class="container">
+<div class="container" style="align-items: center; display: flex; flex-direction: column;">
+    <div class="user-info">
+        <p>Имя: {{ userinfo.first_name }}</p>
+        <p>Фамилия: {{ userinfo.last_name }}</p>
+        <p>Номер телефона: {{ userinfo.phone_number }}</p>
+        <p>Почта: {{ userinfo.email }}</p>
+    </div>
+    <h1>Ваши аренды</h1>
+    <div class="for_rent">
+        {% if rents %}
+                {% for rent in rents %}
+                    <div class="card">
+                        {% if rent.car.photo_path %}
+                            <img src="{{ url_for('static', filename=rent.car.photo_path) }}" alt="Фото {{ rent.car.brand }}" style="width: 200px; height: auto;">
+                        {% endif %}
+                        <h3>{{ rent.car.brand }}</h3>
+                        <p>Цена: {{ rent.car.price }} Руб/Ч</p>
+                        <a href="#" class="btn stop-rent-btn" data-rent-id="{{ rent.id }}" style="text-align: center;">Прекратить аренду</a>
+                    </div>
+                {% endfor %}
+        {% else %}
+            <p>У вас нет активных аренд.</p>
+        {% endif %}
+    </div>
     <a href="/logout" class="btn">Выйти из аккаунта</a>
 </div>
+<script>
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Получаем все кнопки "Прекратить аренду"
+    const stopRentButtons = document.querySelectorAll('.stop-rent-btn');
+
+    stopRentButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            // Получаем ID аренды из атрибута data-rent-id
+            const rentId = this.getAttribute('data-rent-id');
+
+            // Отправляем POST-запрос
+            fetch('http://127.0.0.1:5000/api/v1/stop_rent', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    rent_id: rentId
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Ошибка при отправке запроса');
+                }
+            })
+            .then(data => {
+                if (data.success) {
+                    alert(data.message); // Уведомление об успешном завершении
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при прекращении аренды');
+            });
+        });
+    });
+});
+
+</script>
+
 {% endblock %}

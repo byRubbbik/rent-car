@@ -33,3 +33,4 @@ def load_user(user_id):
     
 
 from app import models, views
+from app.api.v1 import rent

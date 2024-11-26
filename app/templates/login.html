@@ -5,13 +5,13 @@
 {% block main %}
 <div class="container">
     <form action="/login" method="post">
-        {% with messages = get_flashed_messages() %}
-		    {% if messages %}
-			    {% for message in messages %}
-				    <span style="background-color: #b10000d7;">{{ message }}</span>
-			    {% endfor %}
-		    {% endif %}
-	    {% endwith %}
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+					<span style="background-color: #b10000d7; padding: 15px 20px; border-radius: 5px;">{{ message }}</span>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
         <div class="form-group">
 		    <label for="inputUsername">Имя пользователя:</label>
 		    <input id="inputUsername" name="username" type="text">
@@ -22,7 +22,7 @@
 		    <input id="inputPsw" name="password" type="password">
 	    </div>
 
-        <button class="btn" type="submit">Войти</button>
+        <button class="btn" type="submit" style="border: none;">Войти</button>
     </form>
 </div>
 {% endblock %}

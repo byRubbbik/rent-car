@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}Авторизация{% endblock %}
+
+{% block main %}
+<div class="container">
+    <form action="/profile/add_userinfo/{{ current_user.id }}" method="post">
+        {% with messages = get_flashed_messages() %}
+		    {% if messages %}
+			    {% for message in messages %}
+				    <span style="background-color: #b10000d7; padding: 15px 20px; border-radius: 5px;">{{ message }}</span>
+			    {% endfor %}
+		    {% endif %}
+	    {% endwith %}
+        <div class="form-group">
+		    <label for="inputFirstName">Имя:</label>
+		    <input id="inputFirstName" name="first_name" type="text">
+	    </div>
+
+	    <div class="form-group">
+		    <label for="inputLastName">Фамилия:</label>
+		    <input id="inputLastName" name="last_name" type="text">
+	    </div>
+
+        <div class="form-group">
+		    <label for="input">Почта:</label>
+		    <input id="inputEmail" name="email" type="email">
+	    </div>
+
+        <div class="form-group">
+		    <label for="inputPhoneNumber">Номер телефона:</label>
+		    <input id="inputPhoneNumber" name="phone_number" type="text">
+	    </div>
+        <button class="btn" type="submit">Войти</button>
+    </form>
+</div>
+{% endblock %}

@@ -9,6 +9,7 @@ class User(db.Model, UserMixin):
     
     username = db.Column(db.String(255), index=True, unique=True, nullable=True)
     password = db.Column(db.String(255), nullable=True)
+    userinfo = db.relationship('UserInfo', backref='user', uselist=False)  # Связь с UserInfo
 
     def __repr__(self):
         return f'{self.id}:{self.username}'
@@ -48,6 +49,8 @@ class UserRent(db.Model):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     car_id = db.Column(db.Integer, db.ForeignKey('cars.id'))
+
+    car = db.relationship('Car', backref='rents')
 
     def __repr__(self):
         return f'{self.id}'

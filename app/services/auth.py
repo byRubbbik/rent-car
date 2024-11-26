@@ -2,7 +2,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db
-from app.models import User
+from app.models import User, UserInfo
 
 
 def auth(loginform):
@@ -24,3 +24,20 @@ def register(regform):
         except:
             db.session.rollback()
             return False
+
+
+def add_user_info(userinfoForms):
+    try:
+        new_info = UserInfo(
+            first_name=userinfoForms['first_name'],
+            last_name=userinfoForms['last_name'],
+            phone_number=userinfoForms['phone_number'],
+            email=userinfoForms['email']
+        )
+        
+        db.session.add(new_info)
+        db.session.commit()
+        return True
+    except Exception:
+        db.session.rollback()
+        return False

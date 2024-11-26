@@ -4,6 +4,55 @@
 
 {% block main %}
 <div class="container">
-    
+    <div class="for-rent">
+        {% for car in cars %}
+            <div class="card">
+                <img src="{{ url_for('static', filename=car.photo_path) }}" alt="Фото {{ car.brand }}" style="width: 200px; height: auto;">
+                <h3>{{ car.brand }}</h3>
+                <p>{{ car.price }} Руб/Ч</p>
+                <a href="#" class="btn rent-btn" data-car-id="{{ car.id }}" style="text-align: center;">Арендовать</a>    
+            </div>
+        {% endfor %}
+    </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Получаем все кнопки "Арендовать"
+        const rentButtons = document.querySelectorAll('.rent-btn');
+
+        rentButtons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                event.preventDefault();
+
+                // Получаем ID автомобиля из атрибута data-car-id
+                const carId = this.getAttribute('data-car-id');
+
+                // Отправляем POST-запрос
+                fetch('http://127.0.0.1:5000/api/v1/add_rent', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        car_id: carId
+                    })
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('Ошибка при отправке запроса');
+                    }
+                })
+                .then(data => {
+                    alert('Аренда успешно добавлена!');
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при аренде');
+                });
+            });
+        });
+    });
+</script>
 {% endblock %}
