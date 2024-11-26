@@ -21,5 +21,5 @@ def reg_forms(regform):
             else:
                 return 1
     return False
-    
+
             
